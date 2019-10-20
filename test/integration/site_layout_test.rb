@@ -1,14 +1,32 @@
 require 'test_helper'
 
 class SiteLayoutTest < ActionDispatch::IntegrationTest
-  test "layout links" do
-    get root_path #疑似的にhttpリクエストを送る
-    assert_template 'static_pages/home' #指定したテンプレートが選択されたか
-    assert_select 'a[href=?]', root_path,count: 2 #指定したリンクへの'a[href=?]が実行されているか
-    assert_select 'a[href=?]', help_path
-    assert_select 'a[href=?]', about_path
-    assert_select 'a[href=?]', contact_path
+ test "layout links" do
+    get root_path
+    assert_template 'static_pages/home'
+    assert_select "a[href=?]", root_path, count: 2
+    assert_select "a[href=?]", help_path
+    assert_select "a[href=?]", about_path
+    assert_select "a[href=?]", contact_path
+    assert_select "a[href=?]", login_path
     get contact_path
-    assert_select "title", full_title("Contact") #titleタグにContactを含むfull_titleヘルパーがあるか
+    assert_select "title", full_title("Contact")
+    get signup_path
+    assert_select "title", full_title("Sign up")
   end
+  
+  def setup
+    @user = users(:michael)
+  end
+  
+   test"layout links when logged in" do
+    log_in_as(@user)
+    get root_path
+    assert_select "a[href=?]", root_path, count: 2
+    assert_select "a[href=?]", help_path
+    assert_select "a[href=?]", users_path
+    assert_select "a[href=?]", about_path
+    assert_select "a[href=?]", contact_path
+    
+   end
 end
