@@ -4,6 +4,7 @@ require 'rails/test_help'
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
+  #この行のおかげでtest実施時にfixtureファイルの自動読み込みがなされている
   fixtures :all
   include ApplicationHelper
  

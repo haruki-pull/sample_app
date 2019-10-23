@@ -26,6 +26,12 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
+  #mailer設定
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :test
+  host = 'ebbeae4582494f4a96f252c7b165a5cb.vfs.cloud9.us-east-1.amazonaws.com'     # クラウドIDE
+  config.action_mailer.default_url_options = { host: host, protocol: 'https' }
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
