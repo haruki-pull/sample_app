@@ -27,7 +27,9 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                          password:              "password",
                                          password_confirmation: "password" } }
     end
+    #メール1件だけ送る
     assert_equal 1, ActionMailer::Base.deliveries.size
+    #assignsはtest内でインスタンス変数にアクセスするメソッド
     user = assigns(:user)
     assert_not user.activated?
     # 有効化していない状態でログインしてみる
