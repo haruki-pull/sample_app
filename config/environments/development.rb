@@ -24,7 +24,7 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
-  config.web_console.development_only = false
+  #config.web_console.development_only = false
   #mailer設定
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :test
