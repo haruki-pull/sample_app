@@ -45,40 +45,48 @@ class UserTest < ActiveSupport::TestCase
   end
   
    #emailのvalidation..(ドット)と,(コンマ)の間違いがないか
-    test "email validation should reject invalid addresses" do
-      invalid_addresses = %w[user@example,com user_at_foo.org user.name@example.
-                             foo@bar_baz.com foo@bar+baz.com]
+  test "email validation should reject invalid addresses" do
+    invalid_addresses = %w[user@example,com user_at_foo.org user.name@example.
+                           foo@bar_baz.com foo@bar+baz.com]
       invalid_addresses.each do |invalid_address|
-        @user.email = invalid_address
-        assert_not @user.valid?, "#{invalid_address.inspect} should be valid" 
-      end
+      @user.email = invalid_address
+      assert_not @user.valid?, "#{invalid_address.inspect} should be valid" 
     end
+  end
     
-    test "email should be unique" do
-      dupuser = @user.dup
-      dupuser.email = @user.email.upcase
-      @user.save
-      assert_not dupuser.valid?
+  test "email should be unique" do
+    dupuser = @user.dup
+    dupuser.email = @user.email.upcase
+    @user.save
+    assert_not dupuser.valid?
+  end
+    
+  test "email addresses should be saved as lower-case" do
+    mixed_case_email = "Foo@ExAMPle.CoM"
+    @user.email = mixed_case_email
+    @user.save
+    assert_equal mixed_case_email.downcase, @user.reload.email
+  end
+    
+  test "password should be presant(no blank)" do
+    @user.password = @user.password_confirmation = " "*6
+    assert_not @user.valid?
+  end
+    
+  test "password have a minimum length" do
+    @user.password = @user.password_confirmation = "a"*5
+    assert_not @user.valid?
+  end
+    
+  test "authenticated? should return false for a user with nil digest" do
+    assert_not @user.authenticated?(:remember, '')
+  end
+    
+test "associated microposts should be destroyed" do
+    @user.save
+    @user.microposts.create!(content: "Lorem ipsum")
+    assert_difference 'Micropost.count', -1 do
+      @user.destroy
     end
-    
-    test "email addresses should be saved as lower-case" do
-      mixed_case_email = "Foo@ExAMPle.CoM"
-      @user.email = mixed_case_email
-      @user.save
-      assert_equal mixed_case_email.downcase, @user.reload.email
-    end
-    
-    test "password should be presant(no blank)" do
-      @user.password = @user.password_confirmation = " "*6
-      assert_not @user.valid?
-    end
-    
-    test "password have a minimum length" do
-      @user.password = @user.password_confirmation = "a"*5
-      assert_not @user.valid?
-    end
-    
-    test "authenticated? should return false for a user with nil digest" do
-      assert_not @user.authenticated?(:remember, '')
   end
 end
