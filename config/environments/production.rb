@@ -87,7 +87,6 @@ Rails.application.configure do
   end
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-end
 
 #mailerのsendgrid設定
   config.action_mailer.raise_delivery_errors = true
@@ -103,3 +102,5 @@ end
     :domain         => 'heroku.com',
     :enable_starttls_auto => true
   }
+  
+end
